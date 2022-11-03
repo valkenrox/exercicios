@@ -1,0 +1,294 @@
+/*
+ * Cópia do programa de árvore binária
+ * Estudo do livro
+ * Estrutura de dados
+ * Ana Fernanda G. Ascencio &
+ * Graziela Santos de Araújo
+ * São Paulo: Pearson Prentice Hall, 2010
+ *
+ */
+#include<iostream>
+using namespace std;
+
+struct ARVORE
+{
+	int num;
+	ARVORE *dir, *esq;
+};
+
+ARVORE* inserir(ARVORE* aux, int num)
+{
+	if (aux == NULL)
+	{
+		aux = new ARVORE();
+		aux->num = num; 
+		aux->esq = NULL;
+		aux->dir = NULL;
+	}
+	else if (num < aux->num) {
+		aux->esq=inserir(aux->esq, num);
+        }
+	else {
+		aux->dir=inserir(aux->dir, num);
+        }
+       
+        cout << endl;
+        cout<<aux->esq<<"  ";
+        cout<<aux->num<<"  ";
+        cout<<aux->dir<<"  ";
+        cout << endl;
+
+	return aux;
+}
+// Lista somente os números pares
+int consultarp(ARVORE* aux, int achou)
+{
+	if (aux != NULL)
+	{
+		if (aux->num % 2 == 0)
+		{
+			cout << aux->num << " ";
+			achou = 1;
+		}
+		achou = consultarp(aux->esq, achou);
+		achou = consultarp(aux->dir, achou);
+	}
+	return achou;
+}
+
+// Mostra elementos da árvore em ordem
+void mostraremordem(ARVORE *aux)
+{
+	if (aux != NULL)
+	{
+		mostraremordem(aux->esq);
+		cout << aux->num << "  ";
+		mostraremordem(aux->dir);
+	}
+}
+
+// desaloca todos os nós da árvore
+ARVORE* desalocar(ARVORE* aux)
+{
+	if(aux!=NULL)
+	{
+		aux->esq=desalocar(aux->esq);
+		aux->dir=desalocar(aux->dir);
+		delete aux;
+	}
+	return NULL;
+}
+
+//
+void mostraremordem2(ARVORE *aux)
+{
+        if (aux != NULL)
+        {
+                mostraremordem2(aux->dir);
+                cout << aux->num << "  ";
+                mostraremordem2(aux->esq);
+
+
+        }
+}
+
+void dir(ARVORE *aux)
+{
+        if (aux != NULL)
+        {       
+		cout <<endl;
+                cout << aux->esq << "  ";
+                cout << aux->num << "  ";
+                cout << aux->dir << "  "<<endl;
+                dir(aux->dir);
+        }
+}
+
+void esq(ARVORE *aux)
+{
+        if (aux != NULL)
+        {
+		cout <<endl;
+                cout << aux->esq << "  ";
+                cout << aux->num << "  ";
+                cout << aux->dir << "  "<<endl;
+                esq(aux->esq);
+        }
+}
+
+void exibe(ARVORE *aux ) {
+  cout <<endl; 
+  cout << aux->esq << "  ";
+  cout << aux->num << "  "; 
+  cout << aux->dir << "  "<<endl;
+}
+void pre(ARVORE *aux)
+{
+ int flag=0;//*
+        if (aux != NULL)
+        {
+           if (aux->esq != NULL) {
+             exibe(aux);
+             flag=1;//*
+                pre(aux->esq);
+  	   }
+
+           if (aux->dir != NULL){
+             if (flag==0) exibe(aux);//*
+                pre(aux->dir);
+           }
+
+          if(aux->esq == NULL && aux->dir == NULL) {
+                exibe(aux);
+          }
+	}
+}
+void pos(ARVORE *aux)
+{
+        if (aux != NULL)
+        {
+           if (aux->esq != NULL) {
+                pre(aux->esq);
+  	   }
+           if (aux->dir != NULL){
+                pre(aux->dir);
+           }
+           exibe(aux);
+	}
+}
+int main()
+{
+	// a árvore está vazia, logo,
+	// o objeto raiz tem o valor null
+	ARVORE *raiz = NULL;
+	
+	int op, achou, numero;
+
+	do
+	{
+	cout << "\nMENU DE OPÇÕES - ÁRVORE BINÁRIA\n"
+	 << "\n1 - Inserir número"
+	 << "\n2 - Consultar números pares"
+	 << "\n3 - Consultar toda a árvore em ordem"
+	 << "\n4 - Esvaziar a árvore"
+	 << "\n5 - Consultar toda a árvore em ordem"
+	 << "\n6 - Esq"
+	 << "\n7 - Dir"
+	 << "\n8 - Pre"
+	 << "\n9 - Pos"
+	 << "\n10 - Sair"
+	 << "\nDigite sua opção: ";
+	cin >> op;
+	if (op < 1 || op >= 10)
+		cout << "Opção inválida!!";
+	else if (op == 1)
+	{
+		raiz = desalocar(raiz);
+		for(int i = 1; i <=6; i++)
+		{
+		cout << "Digite o número a ser inserido na árvore: ";
+		cin >> numero;
+		raiz = inserir(raiz,numero);
+	}
+	       cout << "Números inseridos na árvore!!";
+	}
+	else if (op == 2)
+	{
+		if (raiz == NULL)
+			cout << "Árvore vazia!!";
+		else
+		{
+			achou = 0;
+			achou = consultarp(raiz,achou);
+			if (achou == 0)
+				cout << "Não há números pares na árvore!";
+			}
+		}
+		else if (op == 3)
+		{
+			if (raiz == NULL)
+				cout << "Árvore vazia!!";
+			else
+			{
+		// a árvore contém elementos
+		// e estes serão mostrados em ordem
+			cout << "Listando os elementos da árvore em ordem: ";
+			mostraremordem(raiz);
+			}
+		}
+		else if (op == 5)
+		{
+			if (raiz == NULL)
+				cout << "Árvore vazia!!";
+			else
+			{
+		// a árvore contém elementos
+		// e estes serão mostrados em ordem
+			cout << "Listando os elementos da árvore em ordem: ";
+			mostraremordem2(raiz);
+			}
+		}
+		else if (op == 6)
+		{
+			if (raiz == NULL)
+				cout << "Árvore vazia!!";
+			else
+			{
+		// a árvore contém elementos
+		// e estes serão mostrados em ordem
+			cout << "Listando os elementos da árvore em ordem: ";
+			esq(raiz);
+			}
+		}
+		else if (op == 7)
+		{
+			if (raiz == NULL)
+				cout << "Árvore vazia!!";
+			else
+			{
+		// a árvore contém elementos
+		// e estes serão mostrados em ordem
+			cout << "Listando os elementos da árvore em ordem: ";
+			dir(raiz);
+			}
+		}
+		else if (op == 8)
+		{
+			if (raiz == NULL)
+				cout << "Árvore vazia!!";
+			else
+			{
+		// a árvore contém elementos
+		// e estes serão mostrados em ordem
+			cout << "Listando os elementos da árvore em ordem: ";
+			pre(raiz);
+			}
+		}
+		else if (op == 9)
+		{
+			if (raiz == NULL)
+				cout << "Árvore vazia!!";
+			else
+			{
+		// a árvore contém elementos
+		// e estes serão mostrados em ordem
+			cout << "Listando os elementos da árvore em ordem: ";
+			pos(raiz);
+			}
+		}
+		else if (op == 4)
+		{
+			if (raiz == NULL)
+			cout <<"\nÁrvore vazia!!";
+			else
+			{
+			raiz=desalocar(raiz);
+			cout <<"\nÁrvore esvaziada!";
+			}
+		}
+	  
+	}while (op != 10);
+  // Desalocando nós da árvore
+  raiz = desalocar(raiz);
+  return 1;
+}
